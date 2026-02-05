@@ -1,143 +1,169 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <title>Invitación</title>
-  <link href="Sin_t_tulo-1-web-resources/css/idGeneratedStyles.css" rel="stylesheet" type="text/css" />
+<meta charset="utf-8">
+<title>Invitación</title>
 
-  <style>
-    body {
-      margin: 0;
-      background: #fff;
-      overflow-x: hidden;
-    }
+<link href="Sin_t_tulo-1-web-resources/css/idGeneratedStyles.css" rel="stylesheet">
 
-    /* Fade elegante de la imagen */
-    .fade-in {
-      animation: fadeIn 2.5s ease forwards;
-    }
+<style>
+body {
+  margin: 0;
+  background: #fff;
+  overflow-x: hidden;
+  font-family: "Georgia", serif;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.98); }
-      to   { opacity: 1; transform: scale(1); }
-    }
+/* Imagen entrada cinematográfica */
+.hero {
+  animation: heroFade 3s ease forwards;
+}
+@keyframes heroFade {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
 
-    /* Mensaje inicial */
-    #tap-hint {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Georgia", serif;
-      font-size: 22px;
-      text-align: center;
-      background: rgba(255,255,255,0.95);
-      z-index: 9999;
-      letter-spacing: 0.5px;
-    }
+/* Pantalla inicial */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  text-align: center;
+}
 
-    /* Corazones */
-    .heart {
-      position: fixed;
-      font-size: 20px;
-      animation: floatUp linear forwards;
-      z-index: 9998;
-      opacity: 0.9;
-    }
+#overlay span {
+  font-size: 22px;
+  letter-spacing: 1px;
+}
 
-    @keyframes floatUp {
-      to {
-        transform: translateY(-120vh) scale(1.3);
-        opacity: 0;
-      }
-    }
+/* Brillo pulsante */
+.glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 5px #d4af37; }
+  to { text-shadow: 0 0 15px #f7e7a9; }
+}
 
-    /* Confeti */
-    .confetti {
-      position: fixed;
-      top: -10px;
-      width: 10px;
-      height: 10px;
-      animation: fall linear forwards;
-      z-index: 9997;
-      border-radius: 2px;
-      opacity: 0.85;
-    }
+/* Texto animado */
+#typed {
+  font-size: 22px;
+}
 
-    @keyframes fall {
-      to {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-      }
-    }
-  </style>
+/* Corazones */
+.heart {
+  position: fixed;
+  bottom: -20px;
+  font-size: 22px;
+  animation: rise linear forwards;
+  z-index: 9998;
+}
+@keyframes rise {
+  to {
+    transform: translateY(-120vh) scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Confeti */
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  animation: fall linear forwards;
+  z-index: 9997;
+  border-radius: 2px;
+}
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
 </head>
 
-<body id="Sin_t_tulo-1">
+<body>
 
-  <!-- IMAGEN PRINCIPAL -->
-  <div class="_idGenObjectLayout-1 fade-in">
-    <div id="_idContainer000">
-      <img class="_idGenObjectAttribute-1"
-           src="Sin_t_tulo-1-web-resources/image/1.png"
-           alt="Invitación" />
-    </div>
+<!-- IMAGEN -->
+<div class="_idGenObjectLayout-1 hero">
+  <div id="_idContainer000">
+    <img class="_idGenObjectAttribute-1"
+         src="Sin_t_tulo-1-web-resources/image/1.png"
+         alt="Invitación">
   </div>
+</div>
 
-  <!-- AUDIO -->
-  <audio id="bg-music" loop>
-    <source src="Sin_t_tulo-1-web-resources/audio/WhatsApp_Audio_2026-02-05_at_1.44.05_PM.mpeg" type="audio/mpeg">
-  </audio>
+<!-- AUDIO -->
+<audio id="music" loop>
+  <source src="Sin_t_tulo-1-web-resources/audio/WhatsApp_Audio_2026-02-05_at_1.44.05_PM.mpeg" type="audio/mpeg">
+</audio>
 
-  <!-- MENSAJE -->
-  <div id="tap-hint">
-    Toca la invitación para comenzar 🎶
-  </div>
+<!-- OVERLAY -->
+<div id="overlay">
+  <span id="typed" class="glow"></span>
+</div>
 
-  <!-- SCRIPT -->
-  <script>
-    const music = document.getElementById("bg-music");
-    const hint = document.getElementById("tap-hint");
+<script>
+const text = "Toca la invitación para comenzar 🎶";
+let index = 0;
+const typed = document.getElementById("typed");
+const overlay = document.getElementById("overlay");
+const music = document.getElementById("music");
 
-    function createHeart() {
-      const heart = document.createElement("div");
-      heart.className = "heart";
-      heart.innerHTML = "💖";
-      heart.style.left = Math.random() * 100 + "vw";
-      heart.style.bottom = "-20px";
-      heart.style.animationDuration = (5 + Math.random() * 3) + "s";
-      document.body.appendChild(heart);
+/* Texto letra por letra */
+function typeEffect() {
+  if (index < text.length) {
+    typed.textContent += text.charAt(index);
+    index++;
+    setTimeout(typeEffect, 80);
+  }
+}
+typeEffect();
 
-      setTimeout(() => heart.remove(), 8000);
-    }
+/* Corazones */
+function heart() {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "💖";
+  h.style.left = Math.random() * 100 + "vw";
+  h.style.animationDuration = (5 + Math.random()*3) + "s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),8000);
+}
 
-    function createConfetti() {
-      const confetti = document.createElement("div");
-      confetti.className = "confetti";
-      confetti.style.left = Math.random() * 100 + "vw";
-      confetti.style.animationDuration = (4 + Math.random() * 3) + "s";
-      confetti.style.backgroundColor =
-        ["#d4af37", "#f7e7a9", "#ffffff", "#e6c87a"][Math.floor(Math.random() * 4)];
-      document.body.appendChild(confetti);
+/* Confeti */
+function confetti() {
+  const c = document.createElement("div");
+  c.className = "confetti";
+  c.style.left = Math.random() * 100 + "vw";
+  c.style.animationDuration = (4 + Math.random()*3) + "s";
+  c.style.backgroundColor =
+    ["#d4af37","#f7e7a9","#ffffff","#e6c87a"][Math.floor(Math.random()*4)];
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),7000);
+}
 
-      setTimeout(() => confetti.remove(), 7000);
-    }
+/* Activación */
+document.addEventListener("click", () => {
+  music.play();
+  overlay.style.display = "none";
 
-    document.addEventListener("click", function () {
-      music.play();
-      hint.style.display = "none";
+  const hI = setInterval(heart, 300);
+  const cI = setInterval(confetti, 200);
 
-      const heartInterval = setInterval(createHeart, 300);
-      const confettiInterval = setInterval(createConfetti, 200);
+  setTimeout(()=>{
+    clearInterval(hI);
+    clearInterval(cI);
+  }, 25000);
 
-      setTimeout(() => {
-        clearInterval(heartInterval);
-        clearInterval(confettiInterval);
-      }, 20000);
-
-    }, { once: true });
-  </script>
+},{ once:true });
+</script>
 
 </body>
 </html>
