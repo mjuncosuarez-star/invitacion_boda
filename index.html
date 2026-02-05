@@ -13,7 +13,16 @@
 		</div>
 		<div class="_idGenObjectLayout-1">
 			<div id="_idContainer001" class="_idGenObjectStyleOverride-1">
-				<audio id="_idAudio000" autoplay="autoplay" loop="loop" controls="controls">
+				<audio id="bg-music" autoplay loop>
+  <source src="musica.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+  document.addEventListener("click", function() {
+    const music = document.getElementById("bg-music");
+    music.play();
+  }, { once: true });
+</script>
 					<source src="Sin_t_tulo-1-web-resources/audio/WhatsApp_Audio_2026-02-05_at_1.44.05_PM.mpeg" type="audio/mpeg" />
 				</audio>
 			</div>
