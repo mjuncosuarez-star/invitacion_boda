@@ -12,18 +12,19 @@ body {
   background: #fff;
   overflow-x: hidden;
   font-family: "Georgia", serif;
+  text-align: center;
 }
 
-/* Imagen entrada cinematográfica */
+/* Entrada imagen */
 .hero {
-  animation: heroFade 3s ease forwards;
+  animation: hero 3s ease forwards;
 }
-@keyframes heroFade {
-  from { opacity: 0; transform: scale(0.96); }
+@keyframes hero {
+  from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Pantalla inicial */
+/* Overlay inicial */
 #overlay {
   position: fixed;
   inset: 0;
@@ -32,26 +33,39 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  text-align: center;
-}
-
-#overlay span {
-  font-size: 22px;
-  letter-spacing: 1px;
-}
-
-/* Brillo pulsante */
-.glow {
-  animation: glow 2s ease-in-out infinite alternate;
-}
-@keyframes glow {
-  from { text-shadow: 0 0 5px #d4af37; }
-  to { text-shadow: 0 0 15px #f7e7a9; }
 }
 
 /* Texto animado */
 #typed {
   font-size: 22px;
+  letter-spacing: 1px;
+}
+
+/* Brillo */
+.glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from { text-shadow: 0 0 6px #d4af37; }
+  to { text-shadow: 0 0 18px #f7e7a9; }
+}
+
+/* Info inferior */
+.info {
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeUp 2s ease forwards;
+  animation-delay: 3s;
+}
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(-10px); }
+}
+
+/* Cuenta regresiva */
+#countdown {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #b89b5e;
 }
 
 /* Corazones */
@@ -99,6 +113,12 @@ body {
   </div>
 </div>
 
+<!-- INFO -->
+<div class="info">
+  <div class="glow">Sábado · 20 de Julio · 6:00 PM</div>
+  <div id="countdown"></div>
+</div>
+
 <!-- AUDIO -->
 <audio id="music" loop>
   <source src="Sin_t_tulo-1-web-resources/audio/WhatsApp_Audio_2026-02-05_at_1.44.05_PM.mpeg" type="audio/mpeg">
@@ -106,27 +126,26 @@ body {
 
 <!-- OVERLAY -->
 <div id="overlay">
-  <span id="typed" class="glow"></span>
+  <div id="typed" class="glow"></div>
 </div>
 
 <script>
-const text = "Toca la invitación para comenzar 🎶";
-let index = 0;
+/* TEXTO */
+const message = "Toca la invitación para comenzar 🎶";
+let i = 0;
 const typed = document.getElementById("typed");
 const overlay = document.getElementById("overlay");
 const music = document.getElementById("music");
 
-/* Texto letra por letra */
-function typeEffect() {
-  if (index < text.length) {
-    typed.textContent += text.charAt(index);
-    index++;
-    setTimeout(typeEffect, 80);
+/* TYPE */
+(function type() {
+  if (i < message.length) {
+    typed.textContent += message.charAt(i++);
+    setTimeout(type, 80);
   }
-}
-typeEffect();
+})();
 
-/* Corazones */
+/* CORAZONES */
 function heart() {
   const h = document.createElement("div");
   h.className = "heart";
@@ -137,7 +156,7 @@ function heart() {
   setTimeout(()=>h.remove(),8000);
 }
 
-/* Confeti */
+/* CONFETI */
 function confetti() {
   const c = document.createElement("div");
   c.className = "confetti";
@@ -149,8 +168,21 @@ function confetti() {
   setTimeout(()=>c.remove(),7000);
 }
 
-/* Activación */
-document.addEventListener("click", () => {
+/* CUENTA REGRESIVA */
+const eventDate = new Date("2026-07-20T18:00:00").getTime();
+setInterval(()=>{
+  const now = new Date().getTime();
+  const d = eventDate - now;
+  if (d <= 0) return;
+  const days = Math.floor(d / (1000*60*60*24));
+  const hrs = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+  const min = Math.floor((d%(1000*60*60))/(1000*60));
+  document.getElementById("countdown").innerHTML =
+    `${days} días · ${hrs} horas · ${min} minutos`;
+},1000);
+
+/* ACTIVACIÓN */
+document.addEventListener("click",()=>{
   music.play();
   overlay.style.display = "none";
 
@@ -160,8 +192,7 @@ document.addEventListener("click", () => {
   setTimeout(()=>{
     clearInterval(hI);
     clearInterval(cI);
-  }, 25000);
-
+  },30000);
 },{ once:true });
 </script>
 
