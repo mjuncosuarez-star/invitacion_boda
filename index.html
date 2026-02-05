@@ -1,29 +1,53 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta charset="utf-8" />
-		<title>Sin_t_tulo-1</title>
-		<link href="Sin_t_tulo-1-web-resources/css/idGeneratedStyles.css" rel="stylesheet" type="text/css" />
-	</head>
-	<body id="Sin_t_tulo-1">
-		<div class="_idGenObjectLayout-1">
-			<div id="_idContainer000">
-				<img class="_idGenObjectAttribute-1" src="Sin_t_tulo-1-web-resources/image/1.png" alt="" />
-			</div>
-		</div>
-		<div class="_idGenObjectLayout-1">
-			<div id="_idContainer001" class="_idGenObjectStyleOverride-1">
-			<audio id="bg-music" loop>
-  <source src="Sin_t_tulo-1-web-resources/audio/WhatsApp_Audio_2026-02-05_at_1.44.05_PM.mpeg" type="audio/mpeg">
-</audio>
+<head>
+  <meta charset="utf-8" />
+  <title>Invitación</title>
+  <link href="Sin_t_tulo-1-web-resources/css/idGeneratedStyles.css" rel="stylesheet" type="text/css" />
+</head>
 
-<script>
-  document.addEventListener("click", function () {
-    const music = document.getElementById("bg-music");
-    music.play();
-  }, { once: true });
-</script>
-			</div>
-		</div>
-	</body>
+<body id="Sin_t_tulo-1">
+
+  <!-- IMAGEN PRINCIPAL -->
+  <div class="_idGenObjectLayout-1">
+    <div id="_idContainer000">
+      <img class="_idGenObjectAttribute-1"
+           src="Sin_t_tulo-1-web-resources/image/1.png"
+           alt="Invitación" />
+    </div>
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="bg-music" loop>
+    <source src="Sin_t_tulo-1-web-resources/audio/WhatsApp_Audio_2026-02-05_at_1.44.05_PM.mpeg" type="audio/mpeg">
+  </audio>
+
+  <!-- MENSAJE ELEGANTE -->
+  <div id="tap-hint" style="
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: serif;
+    font-size: 18px;
+    text-align: center;
+    background: rgba(255,255,255,0.9);
+    z-index: 9999;
+  ">
+    Toca la invitación para comenzar 🎶
+  </div>
+
+  <!-- SCRIPT -->
+  <script>
+    document.addEventListener("click", function () {
+      const music = document.getElementById("bg-music");
+      const hint = document.getElementById("tap-hint");
+
+      music.play();
+      hint.style.display = "none";
+    }, { once: true });
+  </script>
+
+</body>
 </html>
