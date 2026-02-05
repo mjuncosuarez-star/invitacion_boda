@@ -12,10 +12,9 @@ body {
   background: #fff;
   overflow-x: hidden;
   font-family: "Georgia", serif;
-  text-align: center;
 }
 
-/* Entrada imagen */
+/* Imagen */
 .hero {
   animation: hero 3s ease forwards;
 }
@@ -24,7 +23,7 @@ body {
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Overlay inicial */
+/* Overlay */
 #overlay {
   position: fixed;
   inset: 0;
@@ -33,9 +32,10 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  text-align: center;
 }
 
-/* Texto animado */
+/* Texto */
 #typed {
   font-size: 22px;
   letter-spacing: 1px;
@@ -50,22 +50,26 @@ body {
   to { text-shadow: 0 0 18px #f7e7a9; }
 }
 
-/* Info inferior */
-.info {
-  margin-top: 20px;
+/* Info flotante */
+#info {
+  position: fixed;
+  bottom: 30px;
+  width: 100%;
+  text-align: center;
   opacity: 0;
-  animation: fadeUp 2s ease forwards;
-  animation-delay: 3s;
-}
-@keyframes fadeUp {
-  to { opacity: 1; transform: translateY(-10px); }
+  transition: opacity 2s ease;
+  z-index: 9996;
 }
 
-/* Cuenta regresiva */
-#countdown {
+#date {
   font-size: 18px;
-  margin-top: 10px;
   color: #b89b5e;
+}
+
+#countdown {
+  font-size: 16px;
+  margin-top: 6px;
+  color: #d4af37;
 }
 
 /* Corazones */
@@ -114,8 +118,8 @@ body {
 </div>
 
 <!-- INFO -->
-<div class="info">
-  <div class="glow">Sábado · 20 de Julio · 6:00 PM</div>
+<div id="info">
+  <div id="date" class="glow">Sábado · 20 de Julio · 6:00 PM</div>
   <div id="countdown"></div>
 </div>
 
@@ -131,19 +135,35 @@ body {
 
 <script>
 /* TEXTO */
-const message = "Toca la invitación para comenzar 🎶";
+const text = "Toca la invitación para comenzar 🎶";
 let i = 0;
 const typed = document.getElementById("typed");
 const overlay = document.getElementById("overlay");
 const music = document.getElementById("music");
+const info = document.getElementById("info");
 
 /* TYPE */
 (function type() {
-  if (i < message.length) {
-    typed.textContent += message.charAt(i++);
+  if (i < text.length) {
+    typed.textContent += text.charAt(i++);
     setTimeout(type, 80);
   }
 })();
+
+/* CUENTA REGRESIVA */
+const eventDate = new Date("2026-07-20T18:00:00").getTime();
+setInterval(() => {
+  const now = new Date().getTime();
+  const d = eventDate - now;
+  if (d <= 0) return;
+
+  const days = Math.floor(d / (1000*60*60*24));
+  const hrs = Math.floor((d%(1000*60*60*24))/(1000*60*60));
+  const min = Math.floor((d%(1000*60*60))/(1000*60));
+
+  document.getElementById("countdown").innerHTML =
+    `${days} días · ${hrs} horas · ${min} minutos`;
+}, 1000);
 
 /* CORAZONES */
 function heart() {
@@ -168,23 +188,11 @@ function confetti() {
   setTimeout(()=>c.remove(),7000);
 }
 
-/* CUENTA REGRESIVA */
-const eventDate = new Date("2026-07-20T18:00:00").getTime();
-setInterval(()=>{
-  const now = new Date().getTime();
-  const d = eventDate - now;
-  if (d <= 0) return;
-  const days = Math.floor(d / (1000*60*60*24));
-  const hrs = Math.floor((d%(1000*60*60*24))/(1000*60*60));
-  const min = Math.floor((d%(1000*60*60))/(1000*60));
-  document.getElementById("countdown").innerHTML =
-    `${days} días · ${hrs} horas · ${min} minutos`;
-},1000);
-
 /* ACTIVACIÓN */
-document.addEventListener("click",()=>{
+document.addEventListener("click", () => {
   music.play();
   overlay.style.display = "none";
+  info.style.opacity = "1";
 
   const hI = setInterval(heart, 300);
   const cI = setInterval(confetti, 200);
@@ -192,7 +200,7 @@ document.addEventListener("click",()=>{
   setTimeout(()=>{
     clearInterval(hI);
     clearInterval(cI);
-  },30000);
+  }, 30000);
 },{ once:true });
 </script>
 
